@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日语检索</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid #ccc;
+            background: #f0f0f0;
+        }
+        .tab.active {
+            background: #fff;
+            border-bottom: none;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        #searchInput {
+            width: calc(100% - 110px);
+            padding: 8px;
+            font-size: 16px;
+        }
+        .result-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+        .result-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .tone {
+            text-decoration: overline;
+        }
+        #search-btn {
+            padding: 8px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        #search-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="tab-container">
+        <div class="tab active" onclick="switchTab('word')">单词检索</div>
+        <div class="tab" onclick="switchTab('grammar')">语法检索</div>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="请输入检索内容...">
+        <button id="search-btn" onclick="search()">搜索</button>
+    </div>
+
+    <div class="result-container" id="resultContainer">
+    </div>
+
+    <script src="./index.js"></script>
+</body>
+</html>
