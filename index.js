@@ -10,7 +10,7 @@ async function loadData() {
         
         wordData = await wordResponse.json();
         grammarData = await grammarResponse.json();
-        console.log(grammarData);
+        console.log(wordData);
         
     } catch (error) {
         console.error('Error loading data:', error);
@@ -66,21 +66,29 @@ function searchWords(searchText, container) {
  * @param {string} tone
  * @returns {string}
  */
-function renderTone(japanese, tone) {
-    if (!tone) {
+function renderTone(japanese, tones) {
+    if (!tones) {
         return japanese;
     }
+
     let text = '';
     let arr = japanese.split('(');
     let kana = arr[0];
-    tone.split('|').forEach(item => {
-        let tones = item.split(',');
-        text += kana.slice(0, tones[0]);
-        if (tones.length === 1) {
-            text += `<span class="tone">${kana.slice(Number(tones[0]))}</span>`;
+    let startIndex = 0;
+    tones = tones.split('|');
+    tones.forEach((item, i) => {
+        let tone = item.split(',');
+        let start = Number(tone[0]), end = Number(tone[1]);
+        text += kana.slice(startIndex, start);
+        if (tone.length === 1) {
+            text += `<span class="tone">${kana.slice(start)}</span>`;
+            startIndex = start;
         } else {
-            text += `<span class="tone">${kana.slice(Number(tones[0]), Number(tones[1]) + 1)}</span>`;
-            text += kana.slice(Number(tones[1]) + 1);
+            text += `<span class="tone">${kana.slice(start, end + 1)}</span>`;
+            startIndex = end + 1;
+            if (i == tones.length - 1) {
+                text += kana.slice(end + 1);
+            }
         }
     });
     if (arr[1]) {
