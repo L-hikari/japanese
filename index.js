@@ -42,6 +42,7 @@ function search() {
 
 // 搜索单词
 function searchWords(searchText, container) {
+    let hasResult = false;
     wordData.forEach(lesson => {
         lesson.data.forEach(word => {
             let [japanese, chinese = '', tone = ''] = word;
@@ -56,9 +57,16 @@ function searchWords(searchText, container) {
                     <div>${chinese}</div>
                 `;
                 container.appendChild(div);
+                hasResult = true;
             }
         });
     });
+    if (!hasResult) {
+        const div = document.createElement('div');
+        div.className = 'no-result';
+        div.innerHTML = '没有找到相关内容';
+        container.appendChild(div); 
+    }
 }
 
 /**
@@ -99,6 +107,7 @@ function renderTone(japanese, tones) {
 
 // 搜索语法
 function searchGrammar(searchText, container) {
+    let hasResult = false;
     grammarData.forEach(lesson => {
         lesson.data.forEach(grammar => {
             if (grammar.length >= 2) {
@@ -113,10 +122,17 @@ function searchGrammar(searchText, container) {
                         <div>${content}</div>
                     `;
                     container.appendChild(div);
+                    hasResult = true;
                 }
             }
         });
     });
+    if (!hasResult) {
+        const div = document.createElement('div');
+        div.className = 'no-result';
+        div.innerHTML = '没有找到相关内容';
+        container.appendChild(div); 
+    }
 }
 
 // 页面加载时初始化数据
