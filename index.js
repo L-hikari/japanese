@@ -5,8 +5,8 @@ let grammarData = [];
 // 加载数据
 async function loadData() {
     try {
-        const wordResponse = await fetch('./elementary/up/word.json');
-        const grammarResponse = await fetch('./elementary/up/grammar.json');
+        const wordResponse = await fetch('./json/word.json');
+        const grammarResponse = await fetch('./json/grammar.json');
         
         wordData = await wordResponse.json();
         grammarData = await grammarResponse.json();
