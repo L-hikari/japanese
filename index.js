@@ -6,11 +6,14 @@ let grammarData = [];
 async function loadData() {
     try {
         const wordResponse = await fetch('./json/word.json');
+        const word1Response = await fetch('./json/word1.json');
         const grammarResponse = await fetch('./json/grammar.json');
         
         wordData = await wordResponse.json();
+        wordData = wordData.concat(await word1Response.json());
         grammarData = await grammarResponse.json();
         console.log(wordData);
+        
         
     } catch (error) {
         console.error('Error loading data:', error);
