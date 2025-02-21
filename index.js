@@ -7,12 +7,14 @@ async function loadData() {
     try {
         const wordResponse = await fetch('./json/word.json');
         const word1Response = await fetch('./json/word1.json');
+        const word2Response = await fetch('./json/word2.json');
         const grammarResponse = await fetch('./json/grammar.json');
+        const grammar1Response = await fetch('./json/grammar1.json');
         
         wordData = await wordResponse.json();
-        wordData = wordData.concat(await word1Response.json());
+        wordData = wordData.concat(await word1Response.json(), await word2Response.json());
         grammarData = await grammarResponse.json();
-        console.log(wordData);
+        grammarData = grammarData.concat(await grammar1Response.json());
         
         
     } catch (error) {
@@ -48,7 +50,7 @@ function searchWords(searchText, container) {
     let hasResult = false;
     wordData.forEach(lesson => {
         lesson.data.forEach(word => {
-            let [japanese, chinese = '', tone = ''] = word;
+            let [japanese, chinese = '', tone = '', loc = ''] = word;
             if (japanese.toLowerCase().includes(searchText) || 
                 chinese.toLowerCase().includes(searchText)) {
                 const div = document.createElement('div');
@@ -58,6 +60,7 @@ function searchWords(searchText, container) {
                     <div>${lesson.book} ${lesson.title}</div>
                     <div>${japanese}</div>
                     <div>${chinese}</div>
+                    <div>${loc}</div>
                 `;
                 container.appendChild(div);
                 hasResult = true;
