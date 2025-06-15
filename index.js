@@ -58,7 +58,7 @@ function switchTab(tab) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
     currentPage = 1;
-    let res = tab === 'word' ? flatWordData : flatGrammarData
+    let res = tab === 'word' ? flatWordData : flatGrammarData;
     displayItems(currentPage, res);
     setupPagination(res);
 }
