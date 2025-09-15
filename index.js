@@ -8,6 +8,27 @@ let grammarSearchRes = [];
 let searchText;
 let resultContainer = document.getElementById('resultContainer');
 let pagination = document.querySelector('.pagination');
+let searchInput = document.getElementById('searchInput');
+let clearIcon = document.getElementById('clearIcon');
+
+// 添加清空按钮的显示/隐藏逻辑
+searchInput.addEventListener('input', function() {
+    clearIcon.classList.toggle('visible', this.value.length > 0);
+});
+
+// 添加回车搜索功能
+searchInput.addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+        search();
+    }
+});
+
+// 添加清空功能
+clearIcon.addEventListener('click', function() {
+    searchInput.value = '';
+    this.classList.remove('visible');
+    search(); // 触发搜索以更新结果
+});
 
 const itemsPerPage = 10;
 let currentPage = 1;
@@ -32,6 +53,9 @@ async function loadData() {
                 const word = lesson.data[j];
                 word.book = lesson.book;
                 word.title = lesson.title;
+                if (word.length < 3) {
+                    console.log(word);
+                }
                 flatWordData.push(word);
             }
         }

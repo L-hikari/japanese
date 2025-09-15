@@ -27,11 +27,32 @@
         }
         .search-container {
             margin-bottom: 20px;
+            position: relative;
         }
         #searchInput {
-            width: calc(100% - 110px);
-            padding: 8px;
+            width: calc(100% - 130px);
+            padding: 8px 30px 8px 8px;
             font-size: 16px;
+        }
+        .clear-icon {
+            position: absolute;
+            right: 120px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+            background: #ccc;
+            border-radius: 50%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 14px;
+            line-height: 1;
+        }
+        .clear-icon.visible {
+            display: flex;
         }
         .result-container {
             border: 1px solid #ccc;
@@ -90,6 +111,7 @@
 
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="请输入检索内容...">
+        <span class="clear-icon" id="clearIcon">×</span>
         <button id="search-btn" onclick="search()">搜索</button>
     </div>
 
