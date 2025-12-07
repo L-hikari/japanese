@@ -27,7 +27,7 @@ searchInput.addEventListener('keyup', function(event) {
 clearIcon.addEventListener('click', function() {
     searchInput.value = '';
     this.classList.remove('visible');
-    search(); // 触发搜索以更新结果
+    // search(); // 触发搜索以更新结果
 });
 
 const itemsPerPage = 10;
