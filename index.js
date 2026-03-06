@@ -39,11 +39,12 @@ async function loadData() {
         const wordResponse = await fetch('./json/word.json');
         const word1Response = await fetch('./json/word1.json');
         const word2Response = await fetch('./json/word2.json');
+        const word3Response = await fetch('./json/word3.json');
         const grammarResponse = await fetch('./json/grammar.json');
         const grammar1Response = await fetch('./json/grammar1.json');
 
         wordData = await wordResponse.json();
-        wordData = wordData.concat(await word1Response.json(), await word2Response.json());
+        wordData = wordData.concat(await word1Response.json(), await word2Response.json(), await word3Response.json());
         grammarData = await grammarResponse.json();
         grammarData = grammarData.concat(await grammar1Response.json());
 
