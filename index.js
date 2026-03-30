@@ -10,6 +10,8 @@ let resultContainer = document.getElementById('resultContainer');
 let pagination = document.querySelector('.pagination');
 let searchInput = document.getElementById('searchInput');
 let clearIcon = document.getElementById('clearIcon');
+let loading = document.getElementById('loading');
+let grammarLoaded = false; // 标记grammar数据是否已加载
 
 // 添加清空按钮的显示/隐藏逻辑
 searchInput.addEventListener('input', function() {
@@ -33,20 +35,29 @@ clearIcon.addEventListener('click', function() {
 const itemsPerPage = 10;
 let currentPage = 1;
 
+// 显示loading
+function showLoading() {
+    loading.classList.add('active');
+    resultContainer.style.display = 'none';
+}
+
+// 隐藏loading
+function hideLoading() {
+    loading.classList.remove('active');
+    resultContainer.style.display = 'block';
+}
+
 // 加载数据
 async function loadData() {
+    showLoading();
     try {
         const wordResponse = await fetch('./json/word.json');
         const word1Response = await fetch('./json/word1.json');
         const word2Response = await fetch('./json/word2.json');
         const word3Response = await fetch('./json/word3.json');
-        const grammarResponse = await fetch('./json/grammar.json');
-        const grammar1Response = await fetch('./json/grammar1.json');
 
         wordData = await wordResponse.json();
         wordData = wordData.concat(await word1Response.json(), await word2Response.json(), await word3Response.json());
-        grammarData = await grammarResponse.json();
-        grammarData = grammarData.concat(await grammar1Response.json());
 
         for (let i = 0; i < wordData.length; i++) {
             const lesson = wordData[i];
@@ -60,6 +71,25 @@ async function loadData() {
                 flatWordData.push(word);
             }
         }
+
+        displayItems(currentPage, flatWordData);
+        setupPagination(flatWordData);
+        hideLoading();
+    } catch (error) {
+        console.error('Error loading data:', error);
+        hideLoading();
+    }
+}
+
+// 加载语法数据
+async function loadGrammarData() {
+    try {
+        const grammarResponse = await fetch('./json/grammar.json');
+        const grammar1Response = await fetch('./json/grammar1.json');
+
+        grammarData = await grammarResponse.json();
+        grammarData = grammarData.concat(await grammar1Response.json());
+
         for (let i = 0; i < grammarData.length; i++) {
             const lesson = grammarData[i];
             for (let j = 0; j < lesson.data.length; j++) {
@@ -70,26 +100,35 @@ async function loadData() {
             }
         }
 
-        displayItems(currentPage, flatWordData);
-        setupPagination(flatWordData);
+        grammarLoaded = true;
     } catch (error) {
-        console.error('Error loading data:', error);
+        console.error('Error loading grammar data:', error);
+        throw error;
     }
 }
 
 // 切换标签页
-function switchTab(tab) {
+async function switchTab(tab) {
+    showLoading();
     currentTab = tab;
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelector(`.tab[onclick="switchTab('${tab}')"]`).classList.add('active');
     currentPage = 1;
+
+    // 如果切换到grammar标签且grammar数据未加载，则加载grammar数据
+    if (tab === 'grammar' && !grammarLoaded) {
+        await loadGrammarData();
+    }
+
     let res = tab === 'word' ? flatWordData : flatGrammarData;
     displayItems(currentPage, res);
     setupPagination(res);
+    hideLoading();
 }
 
 // 搜索功能
-function search() {
+async function search() {
+    showLoading();
     currentPage = 1;
     wordSearchRes = [];
     grammarSearchRes = [];
@@ -101,6 +140,10 @@ function search() {
     if (currentTab === 'word') {
         searchWords(searchText);
     } else {
+        // 如果grammar数据未加载，先加载数据
+        if (!grammarLoaded) {
+            await loadGrammarData();
+        }
         searchGrammar(searchText);
     }
 }
@@ -127,6 +170,7 @@ function searchWords(searchText) {
         div.innerHTML = '没有找到相关内容';
         resultContainer.appendChild(div);
     }
+    hideLoading();
 }
 
 /**
@@ -185,6 +229,7 @@ function searchGrammar(searchText) {
         div.innerHTML = '没有找到相关内容';
         resultContainer.appendChild(div);
     }
+    hideLoading();
 }
 
 // 页面加载时初始化数据
