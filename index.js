@@ -55,9 +55,15 @@ async function loadData() {
         const word1Response = await fetch('./json/word1.json');
         const word2Response = await fetch('./json/word2.json');
         const word3Response = await fetch('./json/word3.json');
+        const word4Response = await fetch('./json/word4.json');
 
         wordData = await wordResponse.json();
-        wordData = wordData.concat(await word1Response.json(), await word2Response.json(), await word3Response.json());
+        wordData = wordData.concat(
+            await word1Response.json(),
+            await word2Response.json(),
+            await word3Response.json(),
+            await word4Response.json()
+        );
 
         for (let i = 0; i < wordData.length; i++) {
             const lesson = wordData[i];
